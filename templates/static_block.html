@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8" />
+		<title>{% block site_title %} {% endblock %}</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='./css/styl.css') }}" />
+		<script src="{{ url_for('static', filename='./js/javascript.js') }}"></script>
+	</head>
+	<body>
+		<div id="main">
+		<!-- To jest komentarz również wieloliniowy -->
+			<header>
+				<h1>Witaj na stronie poświęconej Flask!
+			</header>
+			{% block main_menu %} {% endblock %}
+			<nav>
+				<p>Status</p>
+				<div status="in_progress" class="button"><p>2024</p></div>
+				<div status="" class="button"><p>2023</p></div>
+				<div status="2022" class="button"><p>2022</p></div>
+			</nav>
+			<main>
+				{% block content %}{% endblock %}
+			</main>
+			<aside>
+				<p id="wyrozniony">Tutaj może być Twoja reklama</p>
+			</aside>
+			<footer>
+				<div>
+					<p>Tutaj najważniejsze informacje o naszej stronie
+					oraz jej licencji</p>
+				</div>
+				<div>
+					<p>Tutaj będzie mapa dojazdu</p>
+				</div>
+			</footer>
+			
+		</div>
+	</body>
+</html>
