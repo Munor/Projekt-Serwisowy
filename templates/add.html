@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj zgłoszenie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styl.css') }}" />
+</head>
+<body>
+    <h1>Dodaj nowe zgłoszenie</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label>Imię i nazwisko klienta:</label><br>
+            <input type="text" name="client_name" required>
+        </div>
+        <div class="form-group">
+            <label>Nazwa sprzętu:</label><br>
+            <input type="text" name="device" required>
+        </div>
+        <div class="form-group">
+            <label>Opis problemu:</label><br>
+            <textarea name="description" required></textarea>
+        </div>
+        <button type="submit" class="button">Dodaj zgłoszenie</button>
+        <a href="{{ url_for('index') }}" class="button">Wróć</a>
+    </form>
+</body>
+</html>

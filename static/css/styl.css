@@ -1,0 +1,25 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.button {
+    padding: 5px 10px;
+    background-color: #16cc1c;
+    color: white;
+}
+table {
+    border-collapse: collapse;
+    width: 100%; 
+    margin-top: 10px;
+}
+   
+th, td {
+    border: 1px solid black;
+    padding: 8px; text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}

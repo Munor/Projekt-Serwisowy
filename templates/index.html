@@ -1,18 +1,40 @@
-{% extends 'primary.html' %}
-
-{% block site_title %}
-	Moja strona Flask
-{% endblock %}
-
-{% block main_menu %}
-	<nav id="mainmenu">
-		<div data-akcja="colect" class="button"><p>Przyjęcie sprzętu</p></div>
-		<div data-akcja="device_list" class="button"><p>Lista urządzeń</p></div>
-		<!-- -->
-	</nav>
-{% endblock %}
-
-{% block content %}
-	<p>Właściwa wersja tesktu na stronie</p>
-	<p>Zawartość powinna się zmieniać wraz z menu</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Serwis komputerowy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styl.css') }}" />
+</head>
+<body>
+    <h1>Serwis komputerowy - Lista zgłoszeń</h1>
+    <a href="{{ url_for('add_request') }}" class="button">Dodaj zgłoszenie</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Klient</th>
+            <th>Sprzęt</th>
+            <th>Opis</th>
+            <th>Data przyjęcia</th>
+            <th>Data wydania</th>
+            <th>Status</th>
+            <th>Akcje</th>
+        </tr>
+        {% for req in requests %}
+        <tr>
+            <td>{{ req.request_id }}</td>
+            <td>{{ req.client_name }}</td>
+            <td>{{ req.device }}</td>
+            <td>{{ req.description }}</td>
+            <td>{{ req.date_received }}</td>
+            <td>{{ req.date_released or 'Brak' }}</td>
+            <td>{{ req.status }}</td>
+            <td>
+                {% if req.status == 'W trakcie' %}
+                <a href="{{ url_for('release_request', request_id=req.request_id) }}" class="button">Wydaj</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
