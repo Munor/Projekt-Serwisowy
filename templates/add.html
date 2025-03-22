@@ -3,25 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <title>Dodaj zgłoszenie</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styl.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styl.css') }}">
 </head>
 <body>
     <h1>Dodaj nowe zgłoszenie</h1>
     <form method="POST">
         <div class="form-group">
-            <label>Imię i nazwisko klienta:</label><br>
-            <input type="text" name="client_name" required>
+            <input type="checkbox" id="business" name="business" value="Bike" onchange="toggleDescription()">
+            <label for="business">Firma</label>
         </div>
+
+        <!-- Wygaszenie po zaznaczeniu, że firma -->
+        <div class="form-group client" id="client_name">
+            <label>Imię klienta:</label><br>
+            <input type="text" name="client_name" id="name" >
+        </div>
+        <div class="form-group client" id="client_surname">
+            <label>Nazwisko klienta:</label><br>
+            <input type="text" name="client_surname" id="surname" >
+        </div>
+
+        <!-- Wyświetla się po zaznaczeniu firmy -->
+        <div class="form-group business" id="business_name" style="display: none;">
+            <label>Nazwa firmy:</label><br>
+            <input type="text" name="business_name" >
+        </div>
+        <div class="form-group business" id="business_nip" style="display: none;">
+            <label>NIP firmy:</label><br>
+            <input type="text" name="business_nip" >
+        </div>
+        <div class="form-group business" id="business_person" style="display: none;">
+            <label>Osoba kontaktowa:</label><br>
+            <input type="text" name="business_person" > 
+        </div>
+
+        <!-- Lista rozwijana typów urządzeń -->
         <div class="form-group">
-            <label>Nazwa sprzętu:</label><br>
-            <input type="text" name="device" required>
+            <label>Typ urządzenia:</label><br>
+            <select name="device_type" id="device_type" onchange="toggleManufacturer()" >
+                <option value="">Wybierz typ urządzenia</option>
+                <option value="Komputer">Komputer</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Drukarka">Drukarka</option>
+                <option value="Urządzenie fiskalne">Urządzenie fiskalne</option>
+            </select>
         </div>
+
+        <!-- Lista producentów laptopów (ukryta domyślnie) -->
+        <div class="form-group" id="manufacturer_section" style="display: none;">
+            <label>Producent laptopa:</label><br>
+            <select name="manufacturer" id="manufacturer" onchange="toggleCustomManufacturer()" >
+                <option value="">Wybierz producenta</option>
+                <option value="Dell">Dell</option>
+                <option value="HP">HP</option>
+                <option value="Lenovo">Lenovo</option>
+                <option value="Asus">Asus</option>
+                <option value="Acer">Acer</option>
+                <option value="MSI">MSI</option>
+                <option value="Inne">Inne</option>
+            </select>
+        </div>
+
+        <!-- Pole tekstowe dla niestandardowego producenta (ukryte domyślnie) -->
+        <div class="form-group" id="custom_manufacturer_section" style="display: none;">
+            <label>Wpisz producenta:</label><br>
+            <input type="text" name="custom_manufacturer" id="custom_manufacturer" >
+        </div>
+
         <div class="form-group">
             <label>Opis problemu:</label><br>
-            <textarea name="description" required></textarea>
+            <textarea name="description" ></textarea>
         </div>
+
+        <!-- Nowe pole: Numer seryjny/unikatowy -->
+        <div class="form-group">
+            <label>Numer seryjny/unikatowy:</label><br>
+            <input type="text" name="serial_number" >
+        </div>
+
         <button type="submit" class="button">Dodaj zgłoszenie</button>
         <a href="{{ url_for('index') }}" class="button">Wróć</a>
     </form>
+
+    <script>
+        function toggleDescription() {
+            var checkbox = document.getElementById("business");
+            var clientSections = document.getElementsByClassName("client");
+            var businessSections = document.getElementsByClassName("business");
+
+            for (var i = 0; i < clientSections.length; i++) {
+                clientSections[i].style.display = checkbox.checked ? "none" : "block";
+            }
+            for (var i = 0; i < businessSections.length; i++) {
+                businessSections[i].style.display = checkbox.checked ? "block" : "none";
+            }
+        }
+
+        function toggleManufacturer() {
+            var deviceType = document.getElementById("device_type").value;
+            var manufacturerSection = document.getElementById("manufacturer_section");
+            var manufacturerSelect = document.getElementById("manufacturer");
+            var customManufacturerSection = document.getElementById("custom_manufacturer_section");
+            var customManufacturerInput = document.getElementById("custom_manufacturer");
+
+            if (deviceType === "Laptop") {
+                manufacturerSection.style.display = "block";
+                manufacturerSelect.required = true;
+                customManufacturerSection.style.display = "none";
+                customManufacturerInput.required = false;
+                manufacturerSelect.value = "";
+            } else {
+                manufacturerSection.style.display = "none";
+                manufacturerSelect.required = false;
+                customManufacturerSection.style.display = "none";
+                customManufacturerInput.required = false;
+            }
+        }
+
+        function toggleCustomManufacturer() {
+            var manufacturer = document.getElementById("manufacturer").value;
+            var customManufacturerSection = document.getElementById("custom_manufacturer_section");
+            var customManufacturerInput = document.getElementById("custom_manufacturer");
+
+            if (manufacturer === "Inne") {
+                customManufacturerSection.style.display = "block";
+                customManufacturerInput.required = true;
+            } else {
+                customManufacturerSection.style.display = "none";
+                customManufacturerInput.required = false;
+            }
+        }
+    </script>
 </body>
 </html>

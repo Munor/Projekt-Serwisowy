@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Serwis komputerowy</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styl.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styl.css') }}">
 </head>
 <body>
     <h1>Serwis komputerowy - Lista zgłoszeń</h1>
@@ -11,8 +11,13 @@
     <table>
         <tr>
             <th>ID</th>
-            <th>Klient</th>
-            <th>Sprzęt</th>
+            <th>Klient/Firma</th>
+            <th>NIP</th>
+            <th>Osoba kontaktowa</th>
+            <th>Typ urządzenia</th>
+            <th>Producent</th>
+            <th>Inny producent</th>
+            <th>Numer seryjny</th>
             <th>Opis</th>
             <th>Data przyjęcia</th>
             <th>Data wydania</th>
@@ -22,8 +27,19 @@
         {% for req in requests %}
         <tr>
             <td>{{ req.request_id }}</td>
-            <td>{{ req.client_name }}</td>
-            <td>{{ req.device }}</td>
+            <td>
+                {% if req.client_name %}
+                    {{ req.client_name }} {{ req.client_surname }}
+                {% else %}
+                    {{ req.business_name }}
+                {% endif %}
+            </td>
+            <td>{{ req.business_nip or 'Brak' }}</td>
+            <td>{{ req.business_person or 'Brak' }}</td>
+            <td>{{ req.device_type }}</td>
+            <td>{{ req.manufacturer or 'Brak' }}</td>
+            <td>{{ req.custom_manufacturer or 'Brak' }}</td>
+            <td>{{ req.serial_number }}</td>
             <td>{{ req.description }}</td>
             <td>{{ req.date_received }}</td>
             <td>{{ req.date_released or 'Brak' }}</td>
