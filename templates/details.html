@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Szczegóły zgłoszenia #{{ service_request.request_id }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>ID:</strong> {{ service_request.request_id }}</p>
+            <p><strong>Właściciel:</strong> {{ service_request.business_name if service_request.business_name else service_request.client_name + ' ' + service_request.client_surname }}</p>
+            <p><strong>Typ sprzętu:</strong> {{ service_request.device_type }}</p>
+            <p><strong>Producent:</strong> {{ service_request.manufacturer or service_request.custom_manufacturer }}</p>
+            <p><strong>Numer seryjny:</strong> {{ service_request.serial_number }}</p>
+            <p><strong>Opis:</strong> {{ service_request.description }}</p>
+            <p><strong>Data przyjęcia:</strong> {{ service_request.date_received }}</p>
+            <p><strong>Data wydania:</strong> {{ service_request.date_released or 'Nie wydano jeszcze' }}</p>
+            <p><strong>Status:</strong> {{ service_request.status }}</p>
+            <a href="{{ url_for('generate_pdf', id=service_request.request_id) }}" class="btn btn-primary">Generuj PDF</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

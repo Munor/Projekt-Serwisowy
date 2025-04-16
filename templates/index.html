@@ -1,56 +1,33 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Serwis komputerowy</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styl.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
     <h1>Serwis komputerowy - Lista zgłoszeń</h1>
-    <a href="{{ url_for('add_request') }}" class="button">Dodaj zgłoszenie</a>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Klient/Firma</th>
-            <th>NIP</th>
-            <th>Osoba kontaktowa</th>
-            <th>Typ urządzenia</th>
-            <th>Producent</th>
-            <th>Inny producent</th>
-            <th>Numer seryjny</th>
-            <th>Opis</th>
-            <th>Data przyjęcia</th>
-            <th>Data wydania</th>
-            <th>Status</th>
-            <th>Akcje</th>
-        </tr>
-        {% for req in requests %}
-        <tr>
-            <td>{{ req.request_id }}</td>
-            <td>
-                {% if req.client_name %}
-                    {{ req.client_name }} {{ req.client_surname }}
-                {% else %}
-                    {{ req.business_name }}
-                {% endif %}
-            </td>
-            <td>{{ req.business_nip or 'Brak' }}</td>
-            <td>{{ req.business_person or 'Brak' }}</td>
-            <td>{{ req.device_type }}</td>
-            <td>{{ req.manufacturer or 'Brak' }}</td>
-            <td>{{ req.custom_manufacturer or 'Brak' }}</td>
-            <td>{{ req.serial_number }}</td>
-            <td>{{ req.description }}</td>
-            <td>{{ req.date_received }}</td>
-            <td>{{ req.date_released or 'Brak' }}</td>
-            <td>{{ req.status }}</td>
-            <td>
-                {% if req.status == 'W trakcie' %}
-                <a href="{{ url_for('release_request', request_id=req.request_id) }}" class="button">Wydaj</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+    <a href="{{ url_for('add_request') }}" class="btn btn-primary mb-3">Dodaj zgłoszenie</a>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Właściciel</th>
+                    <th>Sprzęt</th>
+                    <th>Przyjęto</th>
+                    <th>Wydano</th>
+                    <th>Status</th>
+                    <th>Szczegóły</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.business_name if request.business_name else request.client_name + ' ' + request.client_surname }}</td>
+                    <td>{{ request.device_type }}</td>
+                    <td>{{ request.date_received }}</td>
+                    <td>{{ request.date_released or 'N/A' }}</td>
+                    <td>{{ request.status }}</td>
+                    <td><a href="{{ url_for('details', id=request.request_id) }}">Pokaż szczegóły</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

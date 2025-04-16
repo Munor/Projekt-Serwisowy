@@ -23,3 +23,13 @@ th, td {
 th {
     background-color: #f2f2f2;
 }
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+    th, td {
+        min-width: 100px;
+    }
+}

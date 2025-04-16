@@ -1,46 +1,35 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Dodaj zgłoszenie</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styl.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
     <h1>Dodaj nowe zgłoszenie</h1>
     <form method="POST">
-        <div class="form-group">
-            <input type="checkbox" id="business" name="business" value="Bike" onchange="toggleDescription()">
-            <label for="business">Firma</label>
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="business" name="business" onchange="toggleDescription()">
+            <label class="form-check-label" for="business">Firma</label>
         </div>
-
-        <!-- Wygaszenie po zaznaczeniu, że firma -->
         <div class="form-group client" id="client_name">
-            <label>Imię klienta:</label><br>
-            <input type="text" name="client_name" id="name" >
+            <label class="form-label">Imię klienta:</label>
+            <input type="text" class="form-control" name="client_name">
         </div>
         <div class="form-group client" id="client_surname">
-            <label>Nazwisko klienta:</label><br>
-            <input type="text" name="client_surname" id="surname" >
+            <label class="form-label">Nazwisko klienta:</label>
+            <input type="text" class="form-control" name="client_surname">
         </div>
-
-        <!-- Wyświetla się po zaznaczeniu firmy -->
         <div class="form-group business" id="business_name" style="display: none;">
-            <label>Nazwa firmy:</label><br>
-            <input type="text" name="business_name" >
+            < Notices label class="form-label">Nazwa firmy:</label>
+            <input type="text" class="form-control" name="business_name">
         </div>
         <div class="form-group business" id="business_nip" style="display: none;">
-            <label>NIP firmy:</label><br>
-            <input type="text" name="business_nip" >
+            <label class="form-label">NIP firmy:</label>
+            <input type="text" class="form-control" name="business_nip">
         </div>
         <div class="form-group business" id="business_person" style="display: none;">
-            <label>Osoba kontaktowa:</label><br>
-            <input type="text" name="business_person" > 
+            <label class="form-label">Osoba kontaktowa:</label>
+            <input type="text" class="form-control" name="business_person">
         </div>
-
-        <!-- Lista rozwijana typów urządzeń -->
         <div class="form-group">
-            <label>Typ urządzenia:</label><br>
-            <select name="device_type" id="device_type" onchange="toggleManufacturer()" >
+            <label class="form-label">Typ urządzenia:</label>
+            <select name="device_type" id="device_type" class="form-select" onchange="toggleManufacturer()">
                 <option value="">Wybierz typ urządzenia</option>
                 <option value="Komputer">Komputer</option>
                 <option value="Laptop">Laptop</option>
@@ -48,11 +37,9 @@
                 <option value="Urządzenie fiskalne">Urządzenie fiskalne</option>
             </select>
         </div>
-
-        <!-- Lista producentów laptopów (ukryta domyślnie) -->
         <div class="form-group" id="manufacturer_section" style="display: none;">
-            <label>Producent laptopa:</label><br>
-            <select name="manufacturer" id="manufacturer" onchange="toggleCustomManufacturer()" >
+            <label class="form-label">Producent laptopa:</label>
+            <select name="manufacturer" id="manufacturer" class="form-select" onchange="toggleCustomManufacturer()">
                 <option value="">Wybierz producenta</option>
                 <option value="Dell">Dell</option>
                 <option value="HP">HP</option>
@@ -63,76 +50,20 @@
                 <option value="Inne">Inne</option>
             </select>
         </div>
-
-        <!-- Pole tekstowe dla niestandardowego producenta (ukryte domyślnie) -->
         <div class="form-group" id="custom_manufacturer_section" style="display: none;">
-            <label>Wpisz producenta:</label><br>
-            <input type="text" name="custom_manufacturer" id="custom_manufacturer" >
+            <label class="form-label">Wpisz producenta:</label>
+            <input type="text" class="form-control" name="custom_manufacturer" id="custom_manufacturer">
         </div>
-
         <div class="form-group">
-            <label>Opis problemu:</label><br>
-            <textarea name="description" ></textarea>
+            <label class="form-label">Opis problemu:</label>
+            <textarea name="description" class="form-control"></textarea>
         </div>
-
-        <!-- Nowe pole: Numer seryjny/unikatowy -->
         <div class="form-group">
-            <label>Numer seryjny/unikatowy:</label><br>
-            <input type="text" name="serial_number" >
+            <label class="form-label">Numer seryjny/unikatowy:</label>
+            <input type="text" class="form-control" name="serial_number">
         </div>
-
-        <button type="submit" class="button">Dodaj zgłoszenie</button>
-        <a href="{{ url_for('index') }}" class="button">Wróć</a>
+        <button type="submit" class="btn btn-primary">Dodaj zgłoszenie</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Wróć</a>
     </form>
-
-    <script>
-        function toggleDescription() {
-            var checkbox = document.getElementById("business");
-            var clientSections = document.getElementsByClassName("client");
-            var businessSections = document.getElementsByClassName("business");
-
-            for (var i = 0; i < clientSections.length; i++) {
-                clientSections[i].style.display = checkbox.checked ? "none" : "block";
-            }
-            for (var i = 0; i < businessSections.length; i++) {
-                businessSections[i].style.display = checkbox.checked ? "block" : "none";
-            }
-        }
-
-        function toggleManufacturer() {
-            var deviceType = document.getElementById("device_type").value;
-            var manufacturerSection = document.getElementById("manufacturer_section");
-            var manufacturerSelect = document.getElementById("manufacturer");
-            var customManufacturerSection = document.getElementById("custom_manufacturer_section");
-            var customManufacturerInput = document.getElementById("custom_manufacturer");
-
-            if (deviceType === "Laptop") {
-                manufacturerSection.style.display = "block";
-                manufacturerSelect.required = true;
-                customManufacturerSection.style.display = "none";
-                customManufacturerInput.required = false;
-                manufacturerSelect.value = "";
-            } else {
-                manufacturerSection.style.display = "none";
-                manufacturerSelect.required = false;
-                customManufacturerSection.style.display = "none";
-                customManufacturerInput.required = false;
-            }
-        }
-
-        function toggleCustomManufacturer() {
-            var manufacturer = document.getElementById("manufacturer").value;
-            var customManufacturerSection = document.getElementById("custom_manufacturer_section");
-            var customManufacturerInput = document.getElementById("custom_manufacturer");
-
-            if (manufacturer === "Inne") {
-                customManufacturerSection.style.display = "block";
-                customManufacturerInput.required = true;
-            } else {
-                customManufacturerSection.style.display = "none";
-                customManufacturerInput.required = false;
-            }
-        }
-    </script>
-</body>
-</html>
+</div>
+{% endblock %}
