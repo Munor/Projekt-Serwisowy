@@ -4,6 +4,7 @@ from datetime import datetime
 db = SQLAlchemy()
 
 class ServiceRequest(db.Model):
+    """Model reprezentujący zgłoszenie serwisowe."""
     __tablename__ = 'requests'
     
     request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -22,5 +23,6 @@ class ServiceRequest(db.Model):
     status = db.Column(db.String(20), default="W trakcie")
 
     def release_device(self):
+        """Oznacza zgłoszenie jako wydane, ustawiając datę wydania i status."""
         self.date_released = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.status = "Wydany"

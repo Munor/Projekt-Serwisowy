@@ -15,6 +15,14 @@ db.init_app(app)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_request():
+    """Dodaje nowe zgłoszenie serwisowe.
+
+    GET: Renderuje formularz dodawania zgłoszenia.
+    POST: Przetwarza dane formularza, waliduje i zapisuje zgłoszenie do bazy.
+
+    Returns:
+        Response: Szablon add.html lub przekierowanie do strony głównej.
+    """
     if request.method == 'POST':
         try:
             print(request.form)  # Debugowanie danych formularza
@@ -57,11 +65,27 @@ def add_request():
 
 @app.route('/details/<int:request_id>')
 def details_request(request_id):
+    """Wyświetla szczegóły zgłoszenia serwisowego.
+
+    Args:
+        request_id (int): ID zgłoszenia.
+
+    Returns:
+        Response: Szablon details.html z danymi zgłoszenia lub 404.
+    """
     req = ServiceRequest.query.get_or_404(request_id)
     return render_template('details.html', req=req)
 
 @app.route('/release/<int:request_id>')
 def release_request(request_id):
+    """Oznacza zgłoszenie jako wydane.
+
+    Args:
+        request_id (int): ID zgłoszenia.
+
+    Returns:
+        Response: Przekierowanie do strony głównej.
+    """
     req = ServiceRequest.query.get_or_404(request_id)
     req.release_device()
     db.session.commit()
@@ -69,6 +93,14 @@ def release_request(request_id):
 
 @app.route('/generate_pdf/<int:id>')
 def generate_pdf(id):
+    """Generuje PDF dla zgłoszenia.
+
+    Args:
+        id (int): ID zgłoszenia.
+
+    Returns:
+        Response: Plik PDF jako załącznik.
+    """
     req = ServiceRequest.query.get_or_404(id)
     html = render_template('pdf_template.html', req=req)
     pdf = pdfkit.from_string(html, False)
@@ -81,6 +113,11 @@ def generate_pdf(id):
 
 @app.route('/')
 def index():
+    """Wyświetla listę zgłoszeń serwisowych.
+
+    Returns:
+        Response: Szablon index.html z listą zgłoszeń.
+    """
     requests = ServiceRequest.query.order_by(ServiceRequest.date_received.desc()).all()
     return render_template('index.html', requests=requests)
 
