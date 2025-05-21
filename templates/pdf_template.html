@@ -2,95 +2,30 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Zgłoszenie serwisowe #{{ service_request.request_id }}</title>
+    <title>Zgłoszenie #{{ req.request_id }}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            font-size: 14px;
-        }
-        h1 {
-            text-align: center;
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            padding: 20px;
-        }
-        .field {
-            margin-bottom: 10px;
-        }
-        .field label {
-            font-weight: bold;
-            display: inline-block;
-            width: 150px;
-        }
-        .field span {
-            display: inline-block;
-        }
-        hr {
-            border: 0;
-            border-top: 1px solid #ccc;
-            margin: 20px 0;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { font-size: 24px; }
+        p { margin: 5px 0; }
+        .label { font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Zgłoszenie serwisowe #{{ service_request.request_id }}</h1>
-        <div class="field">
-            <label>ID zgłoszenia:</label>
-            <span>{{ service_request.request_id }}</span>
-        </div>
-        <div class="field">
-            <label>Właściciel:</label>
-            <span>{{ service_request.business_name if service_request.business_name else service_request.client_name + ' ' + service_request.client_surname }}</span>
-        </div>
-        {% if service_request.business_name %}
-        <div class="field">
-            <label>NIP firmy:</label>
-            <span>{{ service_request.business_nip or 'Brak' }}</span>
-        </div>
-        <div class="field">
-            <label>Osoba kontaktowa:</label>
-            <span>{{ service_request.business_person or 'Brak' }}</span>
-        </div>
+    <h1>Zgłoszenie serwisowe #{{ req.request_id }}</h1>
+    <p><span class="label">ID:</span> {{ req.request_id }}</p>
+    <p><span class="label">Właściciel:</span>
+        {% if req.business_name %}
+            {{ req.business_name }}
+        {% else %}
+            {{ (req.client_name | default('')) + ' ' + (req.client_surname | default('')) | trim }}
         {% endif %}
-        <div class="field">
-            <label>Typ sprzętu:</label>
-            <span>{{ service_request.device_type }}</span>
-        </div>
-        <div class="field">
-            <label>Producent:</label>
-            <span>{{ service_request.manufacturer or service_request.custom_manufacturer or 'Brak' }}</span>
-        </div>
-        <div class="field">
-            <label>Numer seryjny:</label>
-            <span>{{ service_request.serial_number }}</span>
-        </div>
-        <div class="field">
-            <label>Opis problemu:</label>
-            <span>{{ service_request.description }}</span>
-        </div>
-        <div class="field">
-            <label>Data przyjęcia:</label>
-            <span>{{ service_request.date_received }}</span>
-        </div>
-        <div class="field">
-            <label>Data wydania:</label>
-            <span>{{ service_request.date_released or 'Nie wydano jeszcze' }}</span>
-        </div>
-        <div class="field">
-            <label>Status:</label>
-            <span>{{ service_request.status }}</span>
-        </div>
-        <hr>
-        <div style="text-align: center; font-size: 12px;">
-            Wygenerowano przez Serwis Komputerowy
-        </div>
-    </div>
+    </p>
+    <p><span class="label">Typ sprzętu:</span> {{ req.device_type }}</p>
+    <p><span class="label">Producent:</span> {{ req.manufacturer or req.custom_manufacturer or 'Brak' }}</p>
+    <p><span class="label">Numer seryjny:</span> {{ req.serial_number }}</p>
+    <p><span class="label">Opis:</span> {{ req.description }}</p>
+    <p><span class="label">Data przyjęcia:</span> {{ req.date_received }}</p>
+    <p><span class="label">Data wydania:</span> {{ req.date_released or 'Nie wydano jeszcze' }}</p>
+    <p><span class="label">Status:</span> {{ req.status }}</p>
 </body>
 </html>

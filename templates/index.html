@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block title %}Lista zgłoszeń{% endblock %}
 {% block content %}
 <div class="container mt-4">
     <h1>Serwis komputerowy - Lista zgłoszeń</h1>
@@ -12,18 +13,33 @@
                     <th>Przyjęto</th>
                     <th>Wydano</th>
                     <th>Status</th>
-                    <th>Szczegóły</th>
+                    <th>Akcje</th>
                 </tr>
             </thead>
             <tbody>
                 {% for request in requests %}
                 <tr>
-                    <td>{{ request.business_name if request.business_name else request.client_name + ' ' + request.client_surname }}</td>
+                    <td>
+                        {% if request.business_name %}
+                            {{ request.business_name }}
+                        {% else %}
+                            {% if request.client_name or request.client_surname %}
+                                {{ request.client_name | default('') }} {{ request.client_surname | default('') }}
+                            {% else %}
+                                Brak danych
+                            {% endif %}
+                        {% endif %}
+                    </td>
                     <td>{{ request.device_type }}</td>
                     <td>{{ request.date_received }}</td>
                     <td>{{ request.date_released or 'N/A' }}</td>
                     <td>{{ request.status }}</td>
-                    <td><a href="{{ url_for('details', id=request.request_id) }}">Pokaż szczegóły</a></td>
+                    <td>
+                        <a href="{{ url_for('details_request', request_id=request.request_id) }}" class="btn btn-info btn-sm">Szczegóły</a>
+                        {% if request.status == 'W trakcie' %}
+                            <a href="{{ url_for('release_request', request_id=request.request_id) }}" class="btn btn-success btn-sm">Wydaj</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
